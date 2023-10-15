@@ -1,12 +1,33 @@
 version: '3'
 services:
-  dc-full-stack-code-challenge-api:
+  # PostgreSQL service
+  db:
+    build:
+      context: ..
+      dockerfile: postgresDockerfile
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: code_challenge
     ports:
-      - "8000:8080"
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Python application service
+  app:
     build:
       context: ..
       dockerfile: Dockerfile
-    volumes:
-      - ..:/app
+    container_name: python_app
     environment:
-      - PORT=8080
+      - DATABASE_URL=postgresql://postgres:root@db/code_challenge
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

@@ -17,7 +17,7 @@ class Book(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"status": "connected succesfully. Version 1.0"}
+    return {"status": "connected succesfully. Version 1.1"}
 
 # Authors API
 @app.post("/authors/", response_model=Author)

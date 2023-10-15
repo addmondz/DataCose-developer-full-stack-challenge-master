@@ -1,0 +1,4 @@
+FROM postgres:latest
+
+RUN pg_createcluster --start -e UTF-8 16 main\
+    && service postgresql start
