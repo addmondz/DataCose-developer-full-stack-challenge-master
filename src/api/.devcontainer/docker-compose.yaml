@@ -26,8 +26,11 @@ services:
       - DATABASE_URL=postgresql://postgres:root@db/code_challenge
     ports:
       - "8000:8000"
+    # command: uvicorn main:app --host 0.0.0.0 --port $PORT --reload
     depends_on:
       - db
+    volumes:
+      - ../main.py:/app/main.py
 
 volumes:
   postgres_data:
