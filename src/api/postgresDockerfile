@@ -1,8 +1,0 @@
-FROM postgres:latest
-
-RUN if pg_lsclusters ; then \
-       echo "Cluster found."; \
-    else \
-       pg_createcluster --start -e UTF-8 16 main && \
-       service postgresql start; \
-    fi

@@ -1,23 +1,25 @@
 version: '3'
+
+networks:
+  python-network:
+  
 services:
   # PostgreSQL service
-  db:
-    build:
-      context: ..
-      dockerfile: postgresDockerfile
-    image: postgres:latest
+  postgres:
+    image: postgres
     container_name: postgres_db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: code_challenge
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+    networks:
+      python-network:
+        aliases:
+          - postgres-alias
+
 
   # Python application service
-  app:
+  dc-full-stack-code-challenge-api:
     build:
       context: ..
       dockerfile: Dockerfile
@@ -26,11 +28,10 @@ services:
       - DATABASE_URL=postgresql://postgres:root@db/code_challenge
     ports:
       - "8000:8000"
-    # command: uvicorn main:app --host 0.0.0.0 --port $PORT --reload
-    depends_on:
-      - db
     volumes:
       - ../main.py:/app/main.py
+    networks:
+      - python-network
 
 volumes:
   postgres_data:
